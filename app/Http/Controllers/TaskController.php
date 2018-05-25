@@ -153,7 +153,8 @@ class TaskController extends Controller
         return [
             'attributes.title'        => 'required|string',
             'attributes.due_date'     => 'required|date',
-            'attributes.description'  => 'required|string',
+            'attributes.description'  => 'string',
+            'attributes.completed'    => 'boolean',
         ];
     }
 
