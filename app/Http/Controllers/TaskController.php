@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Czim\JsonApi\Requests\JsonApiRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Task;
@@ -18,31 +19,23 @@ class TaskController extends Controller
      */
     public function index()
     {
-       $f_name = function($n){
+        $map_names = function($n){
             return $n[2];
         };
-        // Get a specific filter key value, if it is present (with a default fallback).
-        // Get the page number.
-        global $page, $columns;
-        $hash = [ 
-            'id'         => (string)jsonapi_query()->getFilterValue('id'),
-            'completed'  => strtolower(jsonapi_query()->getFilterValue('completed')) == 'true' ? true : false,
-            'due_date'   => strtotime(jsonapi_query()->getFilterValue('due_date')),
-            'created_at' => strtotime(jsonapi_query()->getFilterValue('created_at')),
-            'updated_at' => strtotime(jsonapi_query()->getFilterValue('updated_at')),
+        
+        $columns = [ 
+            ['id'        , "=", (string)jsonapi_query()->getFilterValue('id')],
+            ['completed' , "=", strtolower(jsonapi_query()->getFilterValue('completed')) == 'true' ? true : false],
+            ['due_date'  , "=", strtotime(jsonapi_query()->getFilterValue('due_date'))],
+            ['created_at', "=", strtotime(jsonapi_query()->getFilterValue('created_at'))],
+            ['updated_at', "=", strtotime(jsonapi_query()->getFilterValue('updated_at'))],
           ];
         $page = (int)jsonapi_query()->getPageNumber();
-        $columns = [];
-        foreach ($hash as $key => $val){
-          if ($val != null){
-            array_push($columns, [$key,"=",$val] );
-          }
-        }
 
-        $names = array_map($f_name, $columns);
+        $names = array_map($map_names, $columns);
         $mem_key = 'tasks-'.$page.'-'.implode("-", $names);
-        $tasks = Cache::remember($mem_key, env('MEMCACHED_TIME'), function () {
-            return Task::where($GLOBALS['columns'])->orderBy('created_at','desc')->jsonPaginate(5);
+        $tasks = Cache::remember($mem_key, env('MEMCACHED_TIME'), function () use($columns) {
+            return Task::where($columns)->orderBy('created_at','desc')->jsonPaginate();
         });
 
         // Instantiate the encoder
@@ -76,18 +69,16 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-      $root = jsonapi_request()->data;
       $validator = Validator::make(jsonapi_request_create()->data, $this->rules());
       if ($validator->fails()){
-          return \Response::json($validator->errors(),500);
+          return jsonapi_response( ["errors" => $validator->errors()],500);
       }else{
-          $task = Task::create(jsonapi_request_create()->data);
-#          return jsonapi_response(jsonapi_request_create());
+          $task = Task::create(jsonapi_request_create()->data["attributes"]);
           $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
           $data = $encoder->encode(["attributes" => $task]);
           $data["data"]["id"] = $task->id;
           $data["data"]["type"] = Str::lower(class_basename($task) );
-          return jsonapi_response( $data );
+          return jsonapi_response( $data , 201);
       }
 
     }
@@ -102,11 +93,12 @@ class TaskController extends Controller
     {
       if ($id != null) {
         $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
-        $task = Cache::remember($id, env('MEMCACHED_TIME'), function () {
-             return Task::findOrFail(jsonapi_request()->id);
+        $task = Cache::remember($id, env('MEMCACHED_TIME'), function () use ($id){
+             return Task::findOrFail($id);
         });
         return jsonapi_response($encoder->encode($task->toArray()));
-
+      }else{
+        return jsonapi_response(["status" => "404", "errors" => [ "title" => "Not found", "detail" => "not found"]],404);
       }
     }
 
@@ -160,7 +152,6 @@ class TaskController extends Controller
     public function rules()
     {
         return [
-            // Attribute rules
             'attributes.title'        => 'required|string',
             'attributes.due_date'     => 'required|date',
             'attributes.description'  => 'required|string',

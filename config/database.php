@@ -40,7 +40,19 @@ return [
             'username' => env('DB_USERNAME',null),
             'password' => env('DB_PASSWORD',null),
             'options'  => [
-							'database' => 'admin' // sets the authentication database required by mongo 3
+  							'database' => 'admin' // sets the authentication database required by mongo 3
+          	]
+        ],
+
+        'mongodb_testing' => [
+            'driver'   => 'mongodb',
+            'host'     => env('DBT_HOST', 'localhost'),
+            'port'     => env('DBT_PORT', 27017),
+            'database' => env('DBT_DATABASE','tasksapi_testing'),
+            'username' => env('DBT_USERNAME',null),
+            'password' => env('DBT_PASSWORD',null),
+            'options'  => [
+							  'database' => 'admin' // sets the authentication database required by mongo 3
           	]
         ],
 

@@ -3,8 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Czim\JsonApi\Providers\JsonApiServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class AppServiceProvider extends JsonApiServiceProvider
 {
     /**
      * Bootstrap any application services.

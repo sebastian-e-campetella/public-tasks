@@ -148,7 +148,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         Czim\JsonApi\Providers\JsonApiServiceProvider::class,
-        'Barryvdh\Debugbar\ServiceProvider',
         Spatie\JsonApiPaginate\JsonApiPaginateServiceProvider::class,
 
 
@@ -214,8 +213,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Moloquent'       => Jenssegers\Mongodb\Eloquent\Model::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Moloquent' => Jenssegers\Mongodb\Eloquent\Model::class,
         'Encoder' => Czim\JsonApi\Facades\Encoder::class,
     ],
 
