@@ -49,7 +49,7 @@ class TaskController extends Controller
         $response_tasks = $tasks->toArray();
         $response_tasks["data"] = $json_tasks;
         return jsonapi_response( $response_tasks);
-  }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -69,18 +69,17 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-      $validator = Validator::make(jsonapi_request_create()->data, $this->rules());
-      if ($validator->fails()){
-          return jsonapi_response( ["errors" => $validator->errors()],500);
-      }else{
-          $task = Task::create(jsonapi_request_create()->data["attributes"]);
-          $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
-          $data = $encoder->encode(["attributes" => $task]);
-          $data["data"]["id"] = $task->id;
-          $data["data"]["type"] = Str::lower(class_basename($task) );
-          return jsonapi_response( $data , 201);
-      }
-
+        $validator = Validator::make(jsonapi_request_create()->data, $this->rules());
+        if ($validator->fails()){
+            return jsonapi_response( ["errors" => $validator->errors()],500);
+        }else{
+            $task = Task::create(jsonapi_request_create()->data["attributes"]);
+            $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
+            $data = $encoder->encode(["attributes" => $task]);
+            $data["data"]["id"] = $task->id;
+            $data["data"]["type"] = Str::lower(class_basename($task) );
+            return jsonapi_response( $data , 201);
+        }
     }
 
     /**
@@ -92,13 +91,13 @@ class TaskController extends Controller
     public function show($id)
     {
       if ($id != null) {
-        $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
-        $task = Cache::remember($id, env('MEMCACHED_TIME'), function () use ($id){
-             return Task::findOrFail($id);
-        });
-        return jsonapi_response($encoder->encode($task->toArray()));
+          $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
+          $task = Cache::remember($id, env('MEMCACHED_TIME'), function () use ($id){
+              return Task::findOrFail($id);
+          });
+          return jsonapi_response($encoder->encode($task->toArray()));
       }else{
-        return jsonapi_response(["status" => "404", "errors" => [ "title" => "Not found", "detail" => "not found"]],404);
+          return jsonapi_response(["status" => "404", "errors" => [ "title" => "Not found", "detail" => "not found"]],404);
       }
     }
 
