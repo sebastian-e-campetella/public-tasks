@@ -62,6 +62,25 @@ user:yourpath$ composer install
 user:yourpath$ php artisan serve
 
 ```
+
+Remember setting your environment variables
+```
+MEMCACHED_TIME=5
+
+DBT_HOST=localhost
+DBT_PORT=27017
+DBT_DATABASE=taskspai_testing
+DBT_USERNAME=null
+DBT_PASSWORD=null
+
+DB_HOST=localhost
+DB_PORT=27017
+DB_DATABASE=taskspai
+DB_USERNAME=null
+DB_PASSWORD=null
+
+```
+
 .... and  enjoy!
 
 ## Testing
