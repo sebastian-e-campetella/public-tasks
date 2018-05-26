@@ -1,60 +1,87 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+## About PublicTaskApi
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+ # PublicTaskApi is an API Restful web application with basic methods, such as:
 
-## About Laravel
+- create
+- update
+- show
+- list
+- delete
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+ # Requirements
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+If you want use this application, you need preinstall some tools. Here a list of tools:
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+- Mongodb 
+  - Mongodb engine [Install instructions](https://docs.mongodb.com/manual/installation/)
+  - PHP Extension [Install instructions](http://php.net/manual/en/mongodb.installation.php)
+  
+- Memcached 
+  - Memcached [Install instructions](https://memcached.org/)
+  - PHP Extension [Install instructions](http://php.net/manual/es/book.memcached.php)
+  
+- PHP
+   List of <a hfref="https://laravel.com/docs/5.6/#installation">laravel</a>  requeriments and modified version of php:
+   
+   - PHP >= 7.2
+   - OpenSSL PHP Extension
+   - PDO PHP Extension
+   - Mbstring PHP Extension
+   - Tokenizer PHP Extension
+   - XML PHP Extension
+   - Ctype PHP Extension
+   - JSON PHP Extension
+   - PhpUnit PHP Extension
+  
+- Composer
+   - [Oficial link](https://getcomposer.org)
+   
+List package you do need:
 
-## Learning Laravel
+```
+libapache2-mod-php7.2 php php-common php-igbinary php-mbstring php-memcached php-mongodb php-msgpack php-mysql php-pear php-xml php-zip php5.6-common php5.6-mbstring php7.0-common php7.0-mbstring php7.0-xml php7.2 php7.2-cli php7.2-common php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-sqlite3 php7.2-xml php7.2-zip
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+ # Use best practices and standards
+ 
+- [json-api](http://http://jsonapi.org). Is a standard by API's comunications.
+- [laravel](https://laravel.com). Is the most popular framework php based.
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
 
-## Laravel Sponsors
+## Cloning and run project
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+You get code 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
+```
+user:yourpath$ git clone https://github.com/sebastian-e-campetella/public-tasks
+user:yourpath$ cd your_project_folder
+user:yourpath$ composer install
+user:yourpath$ php artisan serve
+
+```
+.... and  enjoy!
+
+## Testing
+
+You maybe run test, you do use next code:
+
+```
+ user:path$ APP_ENV=testing ./vendor/bin/phpunit
+```
+and I share curl code for your first request, you need replaced "oid" by the respective id of document.
+
+```
+user:path$ curl -i -H "Accept: application/vnd.api+json" -H "Content-type:  application/vnd.api+json" -X POST -d '{"data": { "type": "task", "attributes": {"title": "firt title", "description": "one description", "due_date": "2022-02-02" }}}' http://localhost:8000/api/tasks
+
+user:path$ curl -i -H "Accept: application/vnd.api+json" -H "Content-type:  application/vnd.api+json" -X PUT -d '{"data": { "type": "task", "id": "oid" ,"attributes": {"title": "second title", "description": "other description", "due_date": "2019-02-02" }}}' http://localhost:8000/api/tasks/oid
+
+user:path$ curl -i -H "Accept: application/vnd.api+json" -H "Content-type:  application/vnd.api+json" -X GET "http://localhost:8000/api/tasks?filter[completed]=false&page[number]=2"
+
+user:path$ curl -i -H "Accept: application/vnd.api+json" -H "Content-type:  application/vnd.api+json" -X GET  http://localhost:8000/api/tasks/oid
+
+user:path$ curl -i -H "Accept: application/vnd.api+json" -H "Content-type:  application/vnd.api+json" -X DELETE  http://localhost:8000/api/tasks/oid
+```
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Thank you for considering contributing to the PublicTask API!.
