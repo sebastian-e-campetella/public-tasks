@@ -24,11 +24,16 @@ class TaskController extends Controller
         };
         
         $columns = [];
-        if ( (string)jsonapi_query()->getFilterValue('id') != "") array_push($columns, ['id' , "=", (string)jsonapi_query()->getFilterValue('id')]);
-        if (jsonapi_query()->getFilterValue('completed') != "") array_push($columns, ['completed' , "=", strtolower(jsonapi_query()->getFilterValue('completed')) == 'true' ? true : false]) ;
-        if (jsonapi_query()->getFilterValue('due_date')) array_push($columns, ['due_date'  , "=", strtotime(jsonapi_query()->getFilterValue('due_date'))]);
-        if (jsonapi_query()->getFilterValue('created_at')) array_push($columns, ['created_at', "=", strtotime(jsonapi_query()->getFilterValue('created_at'))]);
-        if (jsonapi_query()->getFilterValue('created_at') != "") array_push($columns, ['updated_at', "=", strtotime(jsonapi_query()->getFilterValue('updated_at'))]) ;
+        if ( (string)jsonapi_query()->getFilterValue('id') != "") \
+            array_push($columns, ['id' , "=", (string)jsonapi_query()->getFilterValue('id')]);
+        if (jsonapi_query()->getFilterValue('completed') != "") \
+            array_push($columns, ['completed' , "=", strtolower(jsonapi_query()->getFilterValue('completed')) == 'true' ? true : false]) ;
+        if (jsonapi_query()->getFilterValue('due_date')) \
+            array_push($columns, ['due_date'  , "=", strtotime(jsonapi_query()->getFilterValue('due_date'))]);
+        if (jsonapi_query()->getFilterValue('created_at')) \
+            array_push($columns, ['created_at', "=", strtotime(jsonapi_query()->getFilterValue('created_at'))]);
+        if (jsonapi_query()->getFilterValue('created_at') != "") \
+            array_push($columns, ['updated_at', "=", strtotime(jsonapi_query()->getFilterValue('updated_at'))]) ;
          
         $page = (int)jsonapi_query()->getPageNumber();
 
