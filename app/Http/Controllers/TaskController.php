@@ -23,21 +23,23 @@ class TaskController extends Controller
             return $n[2];
         };
         
-        $columns = [ 
-            ['id'        , "=", (string)jsonapi_query()->getFilterValue('id')],
-            ['completed' , "=", strtolower(jsonapi_query()->getFilterValue('completed')) == 'true' ? true : false],
-            ['due_date'  , "=", strtotime(jsonapi_query()->getFilterValue('due_date'))],
-            ['created_at', "=", strtotime(jsonapi_query()->getFilterValue('created_at'))],
-            ['updated_at', "=", strtotime(jsonapi_query()->getFilterValue('updated_at'))],
-          ];
+        $columns = [];
+        if ( (string)jsonapi_query()->getFilterValue('id') != "") array_push($columns, ['id' , "=", (string)jsonapi_query()->getFilterValue('id')]);
+        if (jsonapi_query()->getFilterValue('completed') != "") array_push($columns, ['completed' , "=", strtolower(jsonapi_query()->getFilterValue('completed')) == 'true' ? true : false]) ;
+        if (jsonapi_query()->getFilterValue('due_date')) array_push($columns, ['due_date'  , "=", strtotime(jsonapi_query()->getFilterValue('due_date'))]);
+        if (jsonapi_query()->getFilterValue('created_at')) array_push($columns, ['created_at', "=", strtotime(jsonapi_query()->getFilterValue('created_at'))]);
+        if (jsonapi_query()->getFilterValue('created_at') != "") array_push($columns, ['updated_at', "=", strtotime(jsonapi_query()->getFilterValue('updated_at'))]) ;
+         
         $page = (int)jsonapi_query()->getPageNumber();
 
         $names = array_map($map_names, $columns);
         $mem_key = 'tasks-'.$page.'-'.implode("-", $names);
-        $tasks = Cache::remember($mem_key, env('MEMCACHED_TIME'), function () use($columns) {
+        var_dump($columns);
+        
+        $tasks = Cache::remember($mem_key, env('MEMCACHED_TIME') || 1 , function () use($columns) {
             return Task::where($columns)->orderBy('created_at','desc')->jsonPaginate();
         });
-
+        var_dump($tasks);
         // Instantiate the encoder
         $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
         $encoder->setRequestedIncludes([ 'tasks' ]);
@@ -45,7 +47,7 @@ class TaskController extends Controller
         foreach ($tasks as $task) {
             array_push($json_tasks,["id" => $task->id, "type" => Str::lower(class_basename($task)), "attributes" => $task]);
         }
-
+        var_dump($json_tasks);;
         $response_tasks = $tasks->toArray();
         $response_tasks["data"] = $json_tasks;
         return jsonapi_response( $response_tasks);
@@ -92,7 +94,7 @@ class TaskController extends Controller
     {
       if ($id != null) {
           $encoder = app(\Czim\JsonApi\Contracts\Encoder\EncoderInterface::class);
-          $task = Cache::remember($id, env('MEMCACHED_TIME'), function () use ($id){
+          $task = Cache::remember($id, env('MEMCACHED_TIME') || 1, function () use ($id){
               return Task::findOrFail($id);
           });
           return jsonapi_response($encoder->encode($task->toArray()));
