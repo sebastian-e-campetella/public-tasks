@@ -1,6 +1,8 @@
 
 # About PublicTaskApi
 
+Manage your task readily! 
+
  ## PublicTaskApi is an API Restful web application with basic methods, such as:
 
 - create
