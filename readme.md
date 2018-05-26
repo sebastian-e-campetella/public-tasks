@@ -103,6 +103,8 @@ user:path$ curl -i -H "Accept: application/vnd.api+json" -H "Content-type:  appl
 
 user:path$ curl -i -H "Accept: application/vnd.api+json" -H "Content-type:  application/vnd.api+json" -X DELETE  http://localhost:8000/api/tasks/oid
 ```
+## Documentation UML
+For more information [Visit](https://github.com/sebastian-e-campetella/public-tasks-doc) https://github.com/sebastian-e-campetella/public-tasks-doc
 
 ## Contributing
 
