@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\Task as Task;
 use DateTime;
 
-class ExampleTest extends TestCase
+class TaskTest extends TestCase
 {
     /**
      * A basic test example.
