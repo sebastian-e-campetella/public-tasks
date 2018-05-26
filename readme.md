@@ -1,6 +1,7 @@
-## About PublicTaskApi
 
- # PublicTaskApi is an API Restful web application with basic methods, such as:
+# About PublicTaskApi
+
+ ## PublicTaskApi is an API Restful web application with basic methods, such as:
 
 - create
 - update
@@ -8,7 +9,7 @@
 - list
 - delete
 
- # Requirements
+ ## Requirements
 
 If you want use this application, you need preinstall some tools. Here a list of tools:
 
@@ -42,7 +43,7 @@ List package you do need:
 libapache2-mod-php7.2 php php-common php-igbinary php-mbstring php-memcached php-mongodb php-msgpack php-mysql php-pear php-xml php-zip php5.6-common php5.6-mbstring php7.0-common php7.0-mbstring php7.0-xml php7.2 php7.2-cli php7.2-common php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-sqlite3 php7.2-xml php7.2-zip
 ```
 
- # Use best practices and standards
+ ## Use best practices and standards
  
 - [json-api](http://http://jsonapi.org). Is a standard by API's comunications.
 - [laravel](https://laravel.com). Is the most popular framework php based.
